@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">Grade Calculator</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About Developer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="title">Grade Calculator</h1>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        <form action="/calculate" method="POST" class="form" id="gradeForm">
+            <div id="activities">
+                <!-- Initial input fields for first activity -->
+                <div class="activity">
+                    <div class="form-group">
+                        <label class="label">Activity Name:</label>
+                        <input type="text" name="name_0" class="input" placeholder="Activity Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Total Marks:</label>
+                        <input type="number" name="total_0" class="input" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Obtained Marks:</label>
+                        <input type="number" name="obtained_0" class="input" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Weightage (%):</label>
+                        <input type="number" name="weight_0" class="input" min="0" max="100" step="0.01" required>
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="add_activity" class="btn">Add Another Activity</button>
+            <input type="submit" value="Calculate Grade" class="btn">
+        </form>
+    </div>
+
+    <div id="about" class="about-section">
+        <div class="container">
+            <h2>About Developer</h2>
+            <div class="developer-info">
+                <img src="{{ url_for('static', filename='developer.jpg') }}" alt="Developer" class="developer-img">
+                <p>Name: Mirza Abdullah</p>
+                <p>University: Sperior University</p>
+                <p>I am Mirza Abdullah, a passionate data scientist currently pursuing my Computer Science degree from Superior University. Delving into the intricate world of data has been an exhilarating journey for me. Every dataset is like a puzzle waiting to be solved, and I thrive on the challenge of extracting meaningful insights from raw information.</p>
+                <p>My days are filled with excitement as I immerse myself in the vast realm of data analysis, machine learning, and predictive modeling. From exploring data patterns to building sophisticated algorithms, I relish every step of the process. Each project is an opportunity to push the boundaries of what's possible and uncover innovative solutions to real-world problems.</p>
+                <p>My academic journey has equipped me with a strong foundation in computer science, mathematics, and statistics, laying the groundwork for my foray into the field of data science. I constantly seek to expand my knowledge and skills, staying abreast of the latest advancements in technology and methodologies.</p>
+                <p>Beyond the technical aspects, I understand the importance of effective communication and collaboration in the field of data science. Whether it's presenting insights to stakeholders or working in interdisciplinary teams, I strive to communicate complex concepts in a clear and concise manner, fostering synergy and driving impactful outcomes.</p>
+                <p>In essence, I am driven by a relentless curiosity and a fervent desire to harness the power of data for positive change. As I continue to navigate the ever-evolving landscape of data science, I am excited to contribute my skills and expertise towards building a better, data-driven world.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact" class="contact-section">
+        <div class="container">
+            <h2>Contact Me</h2>
+            <div class="form-container">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSckVraf5LzJLfPygDQhDjIS5nsNMJQP1M7InP9EvD9AN9j31Q/viewform?embedded=true" width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Grade Calculator by Mirza Abdullah. Made with ❤️</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Smooth scroll to sections
+        $('a[href*="#"]').on('click', function(event) {
+            event.preventDefault();
+            $('html, body').animate({
+                scrollTop: $($(this).attr('href')).offset().top
+            }, 800, 'linear');
+        });
+
+        // Add activity button functionality
+        document.getElementById('add_activity').addEventListener('click', function() {
+            var activitiesDiv = document.getElementById('activities');
+            var activityCount = document.querySelectorAll('.activity').length;
+            var newActivity = document.createElement('div');
+            newActivity.className = 'activity';
+            newActivity.innerHTML = `
+                <div class="form-group">
+                    <label class="label">Activity Name:</label>
+                    <input type="text" name="name_${activityCount}" class="input" placeholder="Activity Name" required>
+                </div>
+                <div class="form-group">
+                    <label class="label">Total Marks:</label>
+                    <input type="number" name="total_${activityCount}" class="input" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label class="label">Obtained Marks:</label>
+                    <input type="number" name="obtained_${activityCount}" class="input" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label class="label">Weightage (%):</label>
+                    <input type="number" name="weight_${activityCount}" class="input" min="0" max="100" step="0.01" required>
+                </div>`;
+            activitiesDiv.appendChild(newActivity);
+        });
+    </script>
+</body>
+</html>
